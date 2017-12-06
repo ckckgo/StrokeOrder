@@ -48,12 +48,10 @@ class WordView: UIImageView {
         dashPath.stroke()
         context.restoreGState()
         
-        let borderPath = UIBezierPath()
-        borderPath.move(to: CGPoint(x: Constants.bgBorderLineWidth / 2, y: Constants.bgBorderLineWidth/2))
-        borderPath.addLine(to: CGPoint(x: size.width-Constants.bgBorderLineWidth/2, y: Constants.bgBorderLineWidth/2))
-        borderPath.addLine(to: CGPoint(x: size.width-Constants.bgBorderLineWidth/2, y: size.height - Constants.bgBorderLineWidth/2))
-        borderPath.addLine(to: CGPoint(x:Constants.bgBorderLineWidth / 2, y: size.height - Constants.bgBorderLineWidth/2))
-        borderPath.close()
+        let borderPath = UIBezierPath.init(rect: CGRect(x: Constants.bgBorderLineWidth / 2,
+                                                        y: Constants.bgBorderLineWidth/2,
+                                                        width: size.width-Constants.bgBorderLineWidth,
+                                                        height: size.height-Constants.bgBorderLineWidth));
         borderPath.lineWidth = Constants.bgBorderLineWidth
         borderPath.stroke()
         
