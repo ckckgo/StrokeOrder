@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PathCommand {
-    func execute(to path: UIBezierPath) -> UIBezierPath
+    func execute(to path: UIBezierPath) -> Void
 }
 
 class MoveToCommand: PathCommand {
@@ -19,9 +19,8 @@ class MoveToCommand: PathCommand {
         self.targetPoint = targetPoint
     }
     
-    func execute(to path: UIBezierPath) -> UIBezierPath {
+    func execute(to path: UIBezierPath) -> Void {
         path.move(to: targetPoint)
-        return path
     }
 }
 
@@ -32,9 +31,8 @@ class LineToCommand: PathCommand {
         self.targetPoint = targetPoint
     }
     
-    func execute(to path: UIBezierPath) -> UIBezierPath {
+    func execute(to path: UIBezierPath) -> Void {
         path.addLine(to: targetPoint)
-        return path
     }
 }
 
@@ -47,16 +45,14 @@ class QuadCurveCommand: PathCommand {
         self.controlPoint = controlPoint
     }
     
-    func execute(to path: UIBezierPath) -> UIBezierPath {
+    func execute(to path: UIBezierPath) -> Void {
         path.addQuadCurve(to: targetPoint, controlPoint: controlPoint)
-        return path
     }
 }
 
 class CloseCommand: PathCommand {
-    func execute(to path: UIBezierPath) -> UIBezierPath {
+    func execute(to path: UIBezierPath) -> Void {
         path.close()
-        return path
     }
 }
 
@@ -88,6 +84,7 @@ class CommandGenerator {
         }
     }
 }
+
     /**
      M = moveto
      L = lineto
@@ -102,21 +99,42 @@ class CommandGenerator {
      */
 
 struct SVGTools {
-    static func generatePath(with svgStroke: NSString) ->  UIBezierPath? {
+
+    static func generateMedianPath(with medianArray: Array<Array<CGFloat>>) -> UIBezierPath? {
+        let medianPath = UIBezierPath()
+        medianPath.move(to: CGPoint(x: medianArray[0][0], y: medianArray[0][1]))
+        
+        for index in 1..<medianArray.count {
+            medianPath.addLine(to: CGPoint(x: medianArray[index][0], y: medianArray[index][1]))
+        }
+        return medianPath
+    }
+    
+    
+    static func generateStrokePath(with strokeArray: Array<String>) -> UIBezierPath? {
+        var str = String()
+        for index in 0..<strokeArray.count {
+            str.append(strokeArray[index])
+        }
+        return generateStrokePath(with: str)
+    }
+    
+    static func generateStrokePath(with strokeStr: String) -> UIBezierPath? {
         let regex = "M\\s?\\-?[1-9]\\d*\\s\\-?[1-9]\\d*|Q\\s?\\-?[1-9]\\d*\\s\\-?[1-9]\\d*\\s\\-?[1-9]\\d*\\s\\-?[1-9]\\d*|L\\s?\\-?[1-9]\\d*\\s\\-?[1-9]\\d*|Z"
-//        let stroke = "M 518 382 Q 572 385 623 389 Q 758 399 900 383 Q 928 379 935 390 Q 944 405 930 419 Q 896 452 845 475 Q 829 482 798 473 Q 723 460 480 434 Q 180 409 137 408 Q 130 408 124 408 Q 108 408 106 395 Q 105 380 127 363 Q 146 348 183 334 Q 195 330 216 338 Q 232 344 306 354 Q 400 373 518 382 Z"
+        guard let regular = try? NSRegularExpression.init(pattern: regex, options: .caseInsensitive) else {
+            return nil
+        }
         
-        let regular = try! NSRegularExpression.init(pattern: regex, options: NSRegularExpression.Options.caseInsensitive)
-        
-        let matches = regular.matches(in: svgStroke as String, options: [], range: NSRange(location: 0, length: svgStroke.length))
+        let matches = regular.matches(in: strokeStr, options: [], range: NSRange(location: 0, length: (strokeStr as NSString).length))
         
         let path = UIBezierPath()
         for match in matches {
             let range = match.range
-            let matchStr = svgStroke.substring(with: range)
+            let matchStr = (strokeStr as NSString).substring(with: range)
             let command =  CommandGenerator.generateCommnad(with: matchStr)
             command?.execute(to: path)
         }
         return path
     }
+    
 }

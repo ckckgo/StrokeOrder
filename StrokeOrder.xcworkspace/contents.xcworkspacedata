@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../Demonstration.playground">
+      location = "group:Demonstration.playground">
    </FileRef>
    <FileRef
-      location = "self:">
+      location = "group:StrokeOrder.xcodeproj">
    </FileRef>
 </Workspace>
