@@ -13,6 +13,7 @@
 		BA67818F1FD67A2300193EFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA67818E1FD67A2300193EFD /* Assets.xcassets */; };
 		BA6781921FD67A2300193EFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA6781901FD67A2300193EFD /* LaunchScreen.storyboard */; };
 		BA67819A1FD6999A00193EFD /* WordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6781991FD6999A00193EFD /* WordView.swift */; };
+		BAC5BC781FE12BCE004F40EF /* strokes.db in Resources */ = {isa = PBXBuildFile; fileRef = BAC5BC771FE12BCE004F40EF /* strokes.db */; };
 		BAF72EA51FD6B0A5007A1233 /* SVGTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF72EA41FD6B0A5007A1233 /* SVGTool.swift */; };
 		BAFC78DE1FDA1B9A0028C65F /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFC78DD1FDA1B9A0028C65F /* Word.swift */; };
 /* End PBXBuildFile section */
@@ -26,6 +27,7 @@
 		BA6781911FD67A2300193EFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BA6781931FD67A2300193EFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA6781991FD6999A00193EFD /* WordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordView.swift; sourceTree = "<group>"; };
+		BAC5BC771FE12BCE004F40EF /* strokes.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = strokes.db; sourceTree = "<group>"; };
 		BAF72EA41FD6B0A5007A1233 /* SVGTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGTool.swift; sourceTree = "<group>"; };
 		BAFC78DD1FDA1B9A0028C65F /* Word.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -60,6 +62,7 @@
 		BA6781861FD67A2300193EFD /* StrokeOrder */ = {
 			isa = PBXGroup;
 			children = (
+				BAC5BC771FE12BCE004F40EF /* strokes.db */,
 				BA6781871FD67A2300193EFD /* AppDelegate.swift */,
 				BA6781891FD67A2300193EFD /* ViewController.swift */,
 				BA6781991FD6999A00193EFD /* WordView.swift */,
@@ -134,6 +137,7 @@
 			files = (
 				BA6781921FD67A2300193EFD /* LaunchScreen.storyboard in Resources */,
 				BA67818F1FD67A2300193EFD /* Assets.xcassets in Resources */,
+				BAC5BC781FE12BCE004F40EF /* strokes.db in Resources */,
 				BA67818D1FD67A2300193EFD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

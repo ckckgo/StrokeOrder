@@ -69,7 +69,7 @@ extension ViewController: CAAnimationDelegate {
     }
     
     func drawNextIndex() -> Void {
-        let stroke = word.strokes[index]
+        let stroke = word.strokes[index]考虑
         let strokeOutline = stroke.outline
         let strokeMedian = stroke.median
         
