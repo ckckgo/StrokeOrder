@@ -9,22 +9,83 @@
 import UIKit
 
 class WordView: UIImageView {
-
-    lazy var bgImage: UIImage = self.createBgImage(self.bounds.size)
     
     private struct Constants {
         static let bgLineColor: UIColor = .red
         static let bgBorderLineWidth: CGFloat = 3
         static let bgDashLineWidth: CGFloat = 1
     }
+
+    var word: Word? = nil
+    var strokeIndex: Int = 0
+    
+    lazy var bgImage: UIImage = createBgImage(self.bounds.size)
+    lazy var animation:CABasicAnimation = createAnimation()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        commonInit()
+        self.image = bgImage
     }
     
-    func commonInit() {
-        self.image = bgImage
+    public func drawWord(_ word: Word) -> Void {
+        self.word = word
+        
+        drawOrganic()
+        
+        strokeIndex = 0
+        drawStroke()
+    }
+    
+    private func drawOrganic() -> Void {
+        let organicLayer = CAShapeLayer()
+        organicLayer.fillColor = UIColor.lightGray.cgColor
+        organicLayer.path = word!.outline.cgPath
+        organicLayer.setAffineTransform(CGAffineTransform.init(scaleX: frame.width/1024, y: -frame.height/1024).translatedBy(x: 0, y: -900))
+        layer.addSublayer(organicLayer)
+    }
+    
+    private func drawStroke() -> Void {
+        let stroke = word!.strokes[strokeIndex]
+        let strokeOutline = stroke.outline
+        let strokeMedian = stroke.median
+        
+        
+        let clipLayer = CAShapeLayer()
+        clipLayer.fillColor = UIColor.lightGray.cgColor
+        clipLayer.path = strokeOutline.cgPath
+        
+        let drawLayer = CAShapeLayer()
+        drawLayer.strokeColor = UIColor.red.cgColor
+        drawLayer.fillColor = UIColor.clear.cgColor
+        drawLayer.path = strokeMedian.cgPath
+        drawLayer.lineWidth = 128
+        drawLayer.lineJoin = kCALineJoinRound
+        drawLayer.lineCap = kCALineCapRound
+        drawLayer.setAffineTransform(CGAffineTransform.init(scaleX: frame.width/1024, y: -frame.height/1024).translatedBy(x: 0, y: -900))
+        drawLayer.add(animation, forKey: "path")
+        drawLayer.mask = clipLayer
+        layer.addSublayer(drawLayer)
+    }
+}
+
+extension WordView: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if strokeIndex < word!.strokes.count-1 {
+            strokeIndex = strokeIndex + 1
+            drawStroke()
+        }
+    }
+}
+
+extension WordView {
+    
+    func createAnimation() -> CABasicAnimation {
+        let animation = CABasicAnimation.init(keyPath: "strokeEnd")
+        animation.duration = 3.0
+        animation.fromValue = 0
+        animation.toValue = 1.0
+        animation.delegate = self
+        return animation
     }
     
     func createBgImage(_ size: CGSize) -> UIImage {
@@ -59,5 +120,4 @@ class WordView: UIImageView {
         UIGraphicsEndImageContext()
         return image!
     }
-
 }

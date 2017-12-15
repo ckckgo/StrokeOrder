@@ -18,6 +18,37 @@ struct Word {
     let outline: UIBezierPath
     let strokes: Array<Stroke>
     
+    public init?(character: String, strokeString: String, medianString: String) {
+        
+        guard let strokeJson = try? JSONSerialization.jsonObject(with: strokeString.data(using: .utf8)!, options: .allowFragments) as! Array<String> else {
+            return nil
+        }
+        
+        guard let medianJson = try? JSONSerialization.jsonObject(with: medianString.data(using: .utf8)!, options: .allowFragments) as! Array<Array<Array<CGFloat>>> else {
+            return nil
+        }
+        
+        guard let wordOutline = SVGTools.generateStrokePath(with: strokeJson) else {
+            return nil
+        }
+        
+        if strokeJson.count != medianJson.count {
+            return nil
+        }
+        var wordStrokes = Array<Stroke>()
+        for index in 0..<strokeJson.count {
+            guard let tmpOutline = SVGTools.generateStrokePath(with: strokeJson[index]),
+                let tmpMedian = SVGTools.generateMedianPath(with: medianJson[index]) else {
+                    return nil
+            }
+            wordStrokes.append(Stroke(outline: tmpOutline, median: tmpMedian))
+        }
+        
+        self.character = character
+        outline = wordOutline
+        strokes = wordStrokes
+    }
+    
     public init?(jsonStr: String) {
         let jsonData = jsonStr.data(using: .utf8)!
         guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else {
